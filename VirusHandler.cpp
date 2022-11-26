@@ -1,0 +1,1 @@
+// Responsible for handling any detected viruses; can be made a file vault for quarantining files in the future but for now should only have one method: deleteFile()

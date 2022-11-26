@@ -1,0 +1,1 @@
+// Rudimentary detection engine which just checks if md5 hash of the file are in the definitions

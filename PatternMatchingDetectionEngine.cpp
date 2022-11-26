@@ -1,0 +1,1 @@
+// Uses string matching algorithms to find virus in file

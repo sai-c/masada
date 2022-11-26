@@ -1,0 +1,1 @@
+// This is an interface with a main public method called getFile(), which returns a boolean on whether a file is a virus or not
