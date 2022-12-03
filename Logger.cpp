@@ -4,7 +4,7 @@ Logger::Logger(std::string fileName) {
     this->logFile.open("filename");
 }
 
-Logger::write(std::string message) {
+void Logger::write(std::string message) {
     this->logFile << message;
 }
 

@@ -4,23 +4,28 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <memory>
 #include <fstream>
 
 #include "IDetectionEngine.h"
+#include "VirusHandler.h"
 #include "Definitions.h"
 
 class Scanner
 {
 private:
-    std::vector<std::string> Scanner::getOpenFiles();
+    std::vector<std::string> getOpenFiles();
+    void handleFile(std::string filePath);
 
 public:
-    Scanner(detectionEngine) : detectionEngine_(detectionEngine){};
-    void Scanner::realTimeScan();
-    void Scanner::scan(std::string dir);
+    Scanner(std::unique_ptr<IDetectionEngine> detectionEngine, std::unique_ptr<VirusHandler> virusHandler) 
+        : detectionEngine_(std::move(detectionEngine)), virusHandler_(std::move(virusHandler)){};
+    void realTimeScan();
+    void scan(std::string dir);
     ~Scanner() = default;
 
-    IDetectionEngine detectionEngine_;
+    std::unique_ptr<IDetectionEngine> detectionEngine_;
+    std::unique_ptr<VirusHandler> virusHandler_;
 };
 
 #endif

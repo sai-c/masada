@@ -17,6 +17,7 @@ int main()
     Definitions hashDefinitions("test.txt");
     Logger logger("log.txt");
     std::unique_ptr<IDetectionEngine> detectionEngine = std::make_unique<HashingDetectionEngine>(hashDefinitions);
-    Scanner virusScanner(detectionEngine);
-    virusScanner.scan("/test/");
+    std::unique_ptr<VirusHandler> virusHandler = std::make_unique<VirusHandler>();
+    Scanner virusScanner(std::move(detectionEngine), std::move(virusHandler));
+    virusScanner.scan("test/");
 }

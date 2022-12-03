@@ -1,6 +1,8 @@
+#include "Scanner.h"
 
 #include <vector>
 #include <filesystem>
+#include <string>
 
 std::vector<std::string> Scanner::getOpenFiles() {
     char buffer[128];
@@ -37,7 +39,7 @@ void Scanner::scan(std::string dir) {
     {
         if (item.is_regular_file() && !item.is_symlink())
         {
-            Scanner::handleFile(filePath);
+            Scanner::handleFile(item.path());
         }
     }
 }

@@ -1,12 +1,15 @@
 #ifndef HASHINGDETECTIONENGINE_H
 #define HASHINGDETECTIONENGINE_H
 
-class HashingDetectionEngine
+#include "IDetectionEngine.h"
+#include "Definitions.h"
+
+class HashingDetectionEngine: public IDetectionEngine 
 {
 public:
-    ~HashingDetectionEngine(Definitions hashDefinitions) : hashDefinitions_(hashDefinitions){};
-    ~DetectionEngine(){};
-    virtual int checkFile(std::string filePath) = 0;
+    HashingDetectionEngine(Definitions hashDefinitions) : hashDefinitions_(hashDefinitions){};
+    ~HashingDetectionEngine(){};
+    bool checkFile(std::string filePath);
 
 private:
     Definitions hashDefinitions_;

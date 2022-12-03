@@ -1,5 +1,6 @@
 #include "HashingDetectionEngine.h"
+#include <string>
 
-HashingDetectionEngine:checkFile(std::string filePath) {
+bool HashingDetectionEngine::checkFile(std::string filePath) {
     return false;
 }

@@ -1,5 +1,5 @@
 #include "VirusHandler.h"
 
-void VirusHandler::handle() {
+void VirusHandler::quarantine(std::string filePath) {
     return;
 }

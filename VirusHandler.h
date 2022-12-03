@@ -6,8 +6,8 @@
 class VirusHandler
 {
     public: 
-        VirusHandler();
-        void handle(std::string filePath);
+        VirusHandler() {};
+        void quarantine(std::string filePath);
         ~VirusHandler() = default;
 };
 
