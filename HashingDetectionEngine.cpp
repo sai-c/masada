@@ -2,5 +2,7 @@
 #include <string>
 
 bool HashingDetectionEngine::checkFile(std::string filePath) {
-    return false;
+
+    hashDefinitions_.checkSignature("test");
+    return true;
 }

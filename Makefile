@@ -1,7 +1,17 @@
-CC = g++
-CFLAGS = -Wall -g
- 
+# https://stackoverflow.com/questions/16886591/how-do-i-enable-c11-in-gcc
+CXX=g++
+CXXFLAGS=-g -std=c++17 -Wall
+BIN=prog
 
-Controller: Controller.o Definitions.o
-Controller.o: Controller.cpp Controller.h Definitions.h
-Definitions.o: Definitions.cpp Definitions.h
+SRC=$(wildcard *.cpp)
+OBJ=$(SRC:%.cpp=%.o)
+
+all: $(OBJ)
+	$(CXX) -o $(BIN) $^
+
+%.o: %.c
+	$(CXX) $@ -c $<
+
+clean:
+	rm -f *.o
+	rm $(BIN)
