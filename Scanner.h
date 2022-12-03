@@ -1,5 +1,5 @@
-#ifndef LOGGER_H
-#define LOGGER_H
+#ifndef SCANNER_H
+#define SCANNER_H
 
 #include <string>
 #include <vector>
@@ -15,13 +15,12 @@ private:
     std::vector<std::string> Scanner::getOpenFiles();
 
 public:
-    Scanner(detectionEngine) : detectionEngine_(detectionEngine), hashDefinitions_(hashDefinitions){};
+    Scanner(detectionEngine) : detectionEngine_(detectionEngine){};
     void Scanner::realTimeScan();
     void Scanner::scan(std::string dir);
     ~Scanner() = default;
 
     IDetectionEngine detectionEngine_;
-    Definitions hashDefinitions_;
 };
 
 #endif

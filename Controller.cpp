@@ -12,10 +12,11 @@
 #include <stdio.h>
 #include <string>
 
-
-int main() {
+int main()
+{
     Definitions hashDefinitions("test.txt");
     Logger logger("log.txt");
-    std::unique_ptr<IDetectionEngine> detectionEngine = std::make_unique<HashingDetectionEngine>();
-    Scanner virusScanner(detectionEngine, hashDefinitions);
+    std::unique_ptr<IDetectionEngine> detectionEngine = std::make_unique<HashingDetectionEngine>(hashDefinitions);
+    Scanner virusScanner(detectionEngine);
+    virusScanner.scan("/test/");
 }

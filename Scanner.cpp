@@ -18,10 +18,17 @@ std::vector<std::string> Scanner::getOpenFiles() {
     return openFiles;
 }
 
+void Scanner::handleFile(std::string filePath) {
+    bool result = detectionEngine_->checkFile(filePath);
+    if (result) {
+        virusHandler_->quarantine(filePath);
+    }
+}
+
 void Scanner::realTimeScan() {
     auto openFiles = Scanner::getOpenFiles();
     for (std::string& filePath: openFiles) {
-        detectionEngine_->checkFile(filePath);
+        Scanner::handleFile(filePath);
     }
 }
 
@@ -30,7 +37,7 @@ void Scanner::scan(std::string dir) {
     {
         if (item.is_regular_file() && !item.is_symlink())
         {
-            detectionEngine_->checkFile(filePath);
+            Scanner::handleFile(filePath);
         }
     }
 }
