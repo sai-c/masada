@@ -1,1 +1,8 @@
-// Uses string matching algorithms to find virus in file
+#include "PatternMatchingDetectionEngine.h"
+#include <string>
+
+bool PatternMatchingDetectionEngine::checkFile(std::string filePath) {
+
+    hashDefinitions_.checkSignature("test");
+    return true;
+}
