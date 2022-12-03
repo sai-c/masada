@@ -13,6 +13,7 @@ class Definitions
     public: 
         Definitions(std::string fileName);
         std::vector<std::string> getSignatures();
+        bool checkSignature(std::string signature);
         ~Definitions() = default;
 };
 

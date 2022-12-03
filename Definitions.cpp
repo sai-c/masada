@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 
 void Definitions::loadSignatures(std::string fileName) {
     std::ifstream input(fileName);
@@ -9,6 +10,10 @@ void Definitions::loadSignatures(std::string fileName) {
     {
         hashes.push_back(line);
     }
+}
+
+bool Definitions::checkSignature(std::string signature) {
+   return std::find(this->hashes.begin(), this->hashes.end(), signature) != this->hashes.end();
 }
 
 std::vector<std::string> Definitions::getSignatures() {
