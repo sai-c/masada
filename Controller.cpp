@@ -22,4 +22,7 @@ int main()
     std::unique_ptr<VirusHandler> virusHandler = std::make_unique<VirusHandler>();
     Scanner virusScanner(std::move(fullDetectionEngine), std::move(virusHandler));
     virusScanner.scan("test/");
+
+    std::thread realTimeScanning {&Scanner::realTimeScan, &virusScanner};
+    realTimeScanning.join();
 }

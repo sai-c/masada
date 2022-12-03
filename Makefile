@@ -7,7 +7,7 @@ SRC=$(wildcard *.cpp)
 OBJ=$(SRC:%.cpp=%.o)
 
 all: $(OBJ)
-	$(CXX) -o $(BIN) $^
+	$(CXX) -o $(BIN) $^ -lpthread
 
 %.o: %.c
 	$(CXX) $@ -c $<

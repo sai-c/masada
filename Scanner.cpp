@@ -3,6 +3,7 @@
 #include <vector>
 #include <filesystem>
 #include <string>
+#include <iostream>
 
 std::vector<std::string> Scanner::getOpenFiles() {
     char buffer[128];
