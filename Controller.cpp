@@ -5,6 +5,7 @@
 #include "PatternMatchingDetectionEngine.h"
 #include "Scanner.h"
 #include "Logger.h"
+#include "FileVault.h"
 
 #include <thread>
 #include <memory>
@@ -19,10 +20,16 @@ int main()
     Logger logger("log.txt");
     std::unique_ptr<IDetectionEngine> quickDetectionEngine = std::make_unique<HashingDetectionEngine>(hashDefinitions);
     std::unique_ptr<IDetectionEngine> fullDetectionEngine = std::make_unique<PatternMatchingDetectionEngine>(hashDefinitions);
-    std::unique_ptr<VirusHandler> virusHandler = std::make_unique<VirusHandler>();
-    Scanner virusScanner(std::move(fullDetectionEngine), std::move(virusHandler));
-    virusScanner.scan("test/");
+    std::shared_ptr<VirusHandler> virusHandler = std::make_shared<VirusHandler>();
+    Scanner quickScanner(std::move(quickDetectionEngine), virusHandler);
+    Scanner fullScanner(std::move(quickDetectionEngine), virusHandler);
+    quickScanner.scan("test/");
 
-    std::thread realTimeScanning {&Scanner::realTimeScan, &virusScanner};
+    std::thread realTimeScanning {&Scanner::realTimeScan, &quickScanner};
     realTimeScanning.join();
+
+    std::cout << "\n\n\n";
+    FileVault quarantine("quarantine.vault");
+    quarantine.extract("test/test.txt");
+    std::cout << quarantine.list().size();
 }

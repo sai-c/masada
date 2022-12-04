@@ -18,14 +18,14 @@ private:
     void handleFile(std::string filePath);
 
 public:
-    Scanner(std::unique_ptr<IDetectionEngine> detectionEngine, std::unique_ptr<VirusHandler> virusHandler) 
+    Scanner(std::unique_ptr<IDetectionEngine> detectionEngine, std::shared_ptr<VirusHandler> virusHandler) 
         : detectionEngine_(std::move(detectionEngine)), virusHandler_(std::move(virusHandler)){};
     void realTimeScan();
     void scan(std::string dir);
     ~Scanner() = default;
 
     std::unique_ptr<IDetectionEngine> detectionEngine_;
-    std::unique_ptr<VirusHandler> virusHandler_;
+    std::shared_ptr<VirusHandler> virusHandler_;
 };
 
 #endif
