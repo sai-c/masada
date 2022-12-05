@@ -3,8 +3,11 @@
 
 #include <wx/wx.h>
 #include <wx/sizer.h>
+#include "../FileVault.h"
+
 #include <wx/filepicker.h>
 #include <wx/listctrl.h>
+#include <memory>
 
 
 
@@ -12,6 +15,7 @@ class MainWindow : public wxFrame
 {
 public:
   MainWindow(const wxString& title, int width, int height);
+  void OnButtonClicked(wxCommandEvent& evt);
 private:
   wxPanel * m_Panel;  
   wxPanel * m_Panel_2;  
@@ -22,9 +26,11 @@ private:
   wxButton * m_Button_2;
   wxButton * m_Button_3;
   wxButton * m_Button_4;
-  wxListCtrl* m_item_list;
+  wxListBox* m_item_list;
   wxListCtrl* m_item_list2;
   wxDirPickerCtrl *dirPickerCtrl;
+  FileVault* quarantine;
+    wxDECLARE_EVENT_TABLE();
 
 };
 

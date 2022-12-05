@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "../FileVault.h"
 #include <iostream>
 #include <string>
 
@@ -15,38 +14,28 @@ MainWindow::MainWindow(const wxString &title, int width, int height)
   wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
   wxBoxSizer *sideSizer = new wxBoxSizer(wxHORIZONTAL);
   wxBoxSizer *sideSizer2 = new wxBoxSizer(wxHORIZONTAL);
-  m_item_list = new wxListCtrl(m_Panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
+  m_item_list = new wxListBox(m_Panel, wxID_ANY, wxDefaultPosition, wxDefaultSize);
   m_Button = new wxButton(m_Panel, wxID_ANY, wxT("Quick Scan"),
                           wxPoint(5, 35), wxSize(80, 25));
   m_Button_2 = new wxButton(m_Panel, wxID_ANY, wxT("Full Scan"),
                             wxPoint(5, 35), wxSize(80, 25));
-  m_Button_3 = new wxButton(m_Panel, wxID_ANY, wxT("Unquarantine"),
+  m_Button_3 = new wxButton(m_Panel, 101, wxT("Unquarantine"),
                             wxPoint(5, 35), wxSize(80, 25));
   m_Button_4 = new wxButton(m_Panel, wxID_ANY, wxT("Delete"),
                             wxPoint(5, 35), wxSize(80, 25));
 
     m_EditBox = new wxTextCtrl(m_Panel, wxID_ANY, wxT(""),
                              wxPoint(5, 35), wxSize(160, 24));
-
   // Add first column
-  wxListItem col0;
-  col0.SetId(0);
-  col0.SetText(_("File Path"));
-  col0.SetWidth(100);
-  m_item_list->InsertColumn(0, col0);
+  quarantine = new FileVault("quarantine.vault");
+  quarantine->add("test.txt");
 
-  FileVault quarantine("quarantine.vault");
-  std::vector<std::string> items = quarantine.list();
+  std::vector<std::string> items = quarantine->list();
 
   for (int n = 0; n < (int) items.size(); n++)
   {
-    wxListItem item;
-    item.SetId(n);
-    item.SetText(items[n]);
+    m_item_list->Append(items[n]);
 
-    m_item_list->InsertItem(item);
-
-    m_item_list->SetItem(n, 0, items[n]);
   }
 
   topSizer->Add(dirPickerCtrl, 0, wxALIGN_CENTER);
@@ -64,4 +53,17 @@ MainWindow::MainWindow(const wxString &title, int width, int height)
   m_Panel->SetSizer(topSizer);
 }
 
+void MainWindow::OnButtonClicked(wxCommandEvent& evt)
+{
+  int id = m_item_list->GetSelection();
+  wxString test = m_item_list->GetString(id);
+  quarantine->extract(test.ToStdString());
 
+
+  evt.Skip();
+}
+
+
+wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
+    EVT_BUTTON(101, MainWindow::OnButtonClicked)
+wxEND_EVENT_TABLE()
