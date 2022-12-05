@@ -63,7 +63,7 @@ int scan(std::string file) {
             if (wfile.is_open()) {
                 std::string md5_hash;
                 while (std::getline(wfile, md5_hash)){
-                    std::cout << "Scanning file... " + std::to_string(scanned) + "/35258368 (" + std::to_string((100.0/35258368)*scanned) + "%)" << '\r' << std::flush;
+                    std::cout << "Scanning file... " + std::to_string(scanned) + "/39190528 (" + std::to_string((100.0/39190528)*scanned) + "%)" << '\r' << std::flush;
                     if (md5sum == md5_hash) return 2;
                     scanned++;
                 }
@@ -81,7 +81,7 @@ int scan(std::string file) {
 bool HashingDetectionEngine::checkFile(std::string filePath) {
 
     hashDefinitions_.checkSignature("test");
-    
+
     download();
     int res = scan(filePath);
     switch(res) {
