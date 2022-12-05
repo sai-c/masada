@@ -15,7 +15,10 @@ class MainWindow : public wxFrame
 {
 public:
   MainWindow(const wxString& title, int width, int height);
-  void OnButtonClicked(wxCommandEvent& evt);
+  void OnQuickButtonClicked(wxCommandEvent& evt);
+  void OnFullButtonClicked(wxCommandEvent& evt);
+  void OnUnqButtonClicked(wxCommandEvent& evt);
+  void OnDelButtonClicked(wxCommandEvent& evt);
 private:
   wxPanel * m_Panel;  
   wxPanel * m_Panel_2;  
