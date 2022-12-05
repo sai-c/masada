@@ -27,7 +27,7 @@ class FileVault
     public: 
         std::vector<std::string> list();
         void extract(std::string files);
-        void remove(std::vector<std::string> files);
+        void remove(std::string file_str);
         void add(std::string files);
         FileVault(std::string fileName);
         ~FileVault();

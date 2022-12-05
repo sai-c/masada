@@ -65,19 +65,15 @@ void FileVault::extract(std::string file_str)
     }
 }
 
-void FileVault::remove(std::vector<std::string> files)
+void FileVault::remove(std::string file_str)
 {
     long long init_num = this->files.size();
     auto deleteFiles = [&](File file) -> bool
     {
-        for (std::string file_str : files)
+        if (strcmp(file_str.c_str(), file.filename.c_str()) == 0)
         {
-            if (strcmp(file_str.c_str(), file.filename.c_str()) == 0)
-            {
-                return true;
-            }
+            return true;
         }
-
         return false;
     };
     auto iterator = std::remove_if(this->files.begin(), this->files.end(), deleteFiles);

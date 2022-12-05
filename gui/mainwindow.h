@@ -19,6 +19,7 @@ public:
   void OnFullButtonClicked(wxCommandEvent& evt);
   void OnUnqButtonClicked(wxCommandEvent& evt);
   void OnDelButtonClicked(wxCommandEvent& evt);
+  void updateQuarantine();
 private:
   wxPanel * m_Panel;  
   wxPanel * m_Panel_2;  

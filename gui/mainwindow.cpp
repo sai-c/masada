@@ -30,13 +30,7 @@ MainWindow::MainWindow(const wxString &title, int width, int height)
   quarantine = new FileVault("quarantine.vault");
   quarantine->add("test.txt");
 
-  std::vector<std::string> items = quarantine->list();
-
-  for (int n = 0; n < (int) items.size(); n++)
-  {
-    m_item_list->Append(items[n]);
-
-  }
+  updateQuarantine();
 
   topSizer->Add(dirPickerCtrl, 0, wxALIGN_CENTER);
     sideSizer2->Add(m_Button);
@@ -71,15 +65,36 @@ void MainWindow::OnFullButtonClicked(wxCommandEvent& evt)
 void MainWindow::OnUnqButtonClicked(wxCommandEvent& evt)
 {
   int id = m_item_list->GetSelection();
+  wxString test = m_item_list->GetString(id);
   if (id >= 0) {
-    wxString test = m_item_list->GetString(id);
     quarantine->extract(test.ToStdString());
+    quarantine->remove(test.ToStdString());
   }
+  m_EditBox->SetValue("Unquarantined " + test);
+
+  updateQuarantine();
   evt.Skip();
 }
 void MainWindow::OnDelButtonClicked(wxCommandEvent& evt)
 {
+  int id = m_item_list->GetSelection();
+  wxString test = m_item_list->GetString(id);
+  if (id >= 0) {
+    quarantine->remove(test.ToStdString());
+  }
+  m_EditBox->SetValue("Deleted " + test);
+  updateQuarantine();
   evt.Skip();
+}
+void MainWindow::updateQuarantine() {
+  m_item_list->Clear();
+  std::vector<std::string> items = quarantine->list();
+
+  for (int n = 0; n < (int) items.size(); n++)
+  {
+    m_item_list->Append(items[n]);
+
+  }
 }
 
 
