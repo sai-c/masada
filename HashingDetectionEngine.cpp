@@ -63,7 +63,7 @@ int scan(std::string file) {
             if (wfile.is_open()) {
                 std::string md5_hash;
                 while (std::getline(wfile, md5_hash)){
-                    std::cout << "Scanning file... " + std::to_string(scanned) + "/39190528 (" + std::to_string((100.0/39190528)*scanned) + "%)" << '\r' << std::flush;
+                    std::cout << "Scanning file " + std::to_string(scanned) << '\r' << std::flush;
                     if (md5sum == md5_hash) return 2;
                     scanned++;
                 }
@@ -89,10 +89,10 @@ bool HashingDetectionEngine::checkFile(std::string filePath) {
             std::cout << "File does not exist. Please specify a valid file and try again." << std::endl;
             return false;
         case 1:
-            std::cout << "File was NOT found on the virus list. Opening this file may be safe." << std::endl;
+            std::cout << "File was NOT found in the virus database. Opening this file may be safe." << std::endl;
             return false;
         case 2:
-            std::cout << "File WAS found on the virus list. Please delete the file." << std::endl;
+            std::cout << "File WAS found in the virus database. Please delete the file immediately." << std::endl;
             return true;
     }
     return false;
