@@ -24,6 +24,10 @@ MainWindow::MainWindow(const wxString &title, int width, int height)
                             wxPoint(5, 35), wxSize(80, 25));
   m_Button_4 = new wxButton(m_Panel, wxID_ANY, wxT("Delete"),
                             wxPoint(5, 35), wxSize(80, 25));
+
+    m_EditBox = new wxTextCtrl(m_Panel, wxID_ANY, wxT(""),
+                             wxPoint(5, 35), wxSize(160, 24));
+
   // Add first column
   wxListItem col0;
   col0.SetId(0);
@@ -45,17 +49,18 @@ MainWindow::MainWindow(const wxString &title, int width, int height)
     m_item_list->SetItem(n, 0, items[n]);
   }
 
-  topSizer->Add(dirPickerCtrl);
+  topSizer->Add(dirPickerCtrl, 0, wxALIGN_CENTER);
     sideSizer2->Add(m_Button);
   sideSizer2->Add(m_Button_2);
 
-  topSizer->Add(sideSizer2);
+  topSizer->Add(sideSizer2, 0, wxALIGN_CENTER);
 
-  topSizer->Add(m_item_list);
+  topSizer->Add(m_item_list, 0, wxALIGN_CENTER);
 
   sideSizer->Add(m_Button_3);
   sideSizer->Add(m_Button_4);
-  topSizer->Add(sideSizer);
+  topSizer->Add(sideSizer, 0, wxALIGN_CENTER);
+  topSizer->Add(m_EditBox, 0, wxALIGN_CENTER);
   m_Panel->SetSizer(topSizer);
 }
 
