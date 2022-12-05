@@ -7,7 +7,8 @@ CXXFLAGS=-g -std=c++17 -Wall $(WX_CXXFLAGS) -I..
 BIN=prog
 
 SRC=$(wildcard *.cpp)
-OBJ=$(SRC:%.cpp=%.o) ../FileVault.o
+OBJ=$(SRC:%.cpp=%.o) ../FileVault.o ../Definitions.o ../HashingDetectionEngine.o ../PatternMatchingDetectionEngine.o ../Scanner.o ../Logger.o ../VirusHandler.o
+
 
 all: $(OBJ)
 	$(CXX) -o $(BIN) $^ -lpthread $(WX_LIBS)

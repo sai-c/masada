@@ -4,6 +4,8 @@
 #include <wx/wx.h>
 #include <wx/sizer.h>
 #include <FileVault.h>
+#include "Scanner.h"
+
 
 #include <wx/filepicker.h>
 #include <wx/listctrl.h>
@@ -35,6 +37,7 @@ private:
   wxDirPickerCtrl *dirPickerCtrl;
   FileVault* quarantine;
     wxDECLARE_EVENT_TABLE();
+  Scanner* fullScanner;
 
 };
 

@@ -1,10 +1,32 @@
 #include "mainwindow.h"
 #include <iostream>
 #include <string>
+#include "Definitions.h"
+#include "IDetectionEngine.h"
+#include "HashingDetectionEngine.h"
+#include "PatternMatchingDetectionEngine.h"
+#include "Scanner.h"
+#include "Logger.h"
+#include "FileVault.h"
+
+#include <thread>
+#include <memory>
+#include <iostream>
+#include <stdexcept>
+#include <stdio.h>
+#include <string>
+
 
 MainWindow::MainWindow(const wxString &title, int width, int height)
     : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(width, height))
 {
+
+    Definitions hashDefinitions("test.txt");
+    Logger logger("log.txt");
+    std::unique_ptr<IDetectionEngine> fullDetectionEngine = std::make_unique<PatternMatchingDetectionEngine>(hashDefinitions);
+    std::shared_ptr<VirusHandler> virusHandler = std::make_shared<VirusHandler>();
+    fullScanner = new Scanner(std::move(fullDetectionEngine), virusHandler);
+
   m_Panel = new wxPanel(this, wxID_ANY);
       dirPickerCtrl = new wxDirPickerCtrl(m_Panel, 32700,
                                                        wxEmptyString, wxDirSelectorPromptStr,
@@ -57,9 +79,9 @@ void MainWindow::OnQuickButtonClicked(wxCommandEvent& evt)
 void MainWindow::OnFullButtonClicked(wxCommandEvent& evt)
 {
   wxString dir = dirPickerCtrl->GetPath();
-  
-  m_EditBox->SetValue(dir);
-
+  m_EditBox->SetValue("Scanning " + dir);
+  fullScanner->scan(dir.ToStdString());
+  m_EditBox->SetValue("Scan doen");
   evt.Skip();
 }
 void MainWindow::OnUnqButtonClicked(wxCommandEvent& evt)
