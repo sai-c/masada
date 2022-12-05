@@ -7,7 +7,7 @@ CXXFLAGS=-g -std=c++17 -Wall $(WX_CXXFLAGS) -I..
 BIN=prog
 
 SRC=$(wildcard *.cpp)
-OBJ=$(SRC:%.cpp=%.o)
+OBJ=$(SRC:%.cpp=%.o) ../FileVault.o
 
 all: $(OBJ)
 	$(CXX) -o $(BIN) $^ -lpthread $(WX_LIBS)

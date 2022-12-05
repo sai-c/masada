@@ -3,7 +3,7 @@
 
 #include <wx/wx.h>
 #include <wx/sizer.h>
-#include "../FileVault.h"
+#include <FileVault.h>
 
 #include <wx/filepicker.h>
 #include <wx/listctrl.h>
