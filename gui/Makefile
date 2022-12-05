@@ -1,11 +1,20 @@
+# https://stackoverflow.com/questions/16886591/how-do-i-enable-c11-in-gcc
 WX_CXXFLAGS := $(shell wx-config --cxxflags)
 WX_LIBS := $(shell wx-config --libs)
 
-main: main.o mainwindow.o       
-	g++ -o main main.o mainwindow.o $(WX_LIBS)
+CXX=g++
+CXXFLAGS=-g -std=c++17 -Wall $(WX_CXXFLAGS) -I..
+BIN=prog
 
-main.o: main.cpp        
-	g++ -c main.cpp $(WX_CXXFLAGS)
+SRC=$(wildcard *.cpp)
+OBJ=$(SRC:%.cpp=%.o)
 
-mainwindow.o: mainwindow.cpp    
-	g++ -c mainwindow.cpp $(WX_CXXFLAGS)
+all: $(OBJ)
+	$(CXX) -o $(BIN) $^ -lpthread $(WX_LIBS)
+
+%.o: %.c
+	$(CXX) $@ -c $< $(WX_CXXFLAGS)
+
+clean:
+	rm -f *.o
+	rm $(BIN)

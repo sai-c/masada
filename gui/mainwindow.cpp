@@ -1,46 +1,62 @@
 #include "mainwindow.h"
+#include "../FileVault.h"
 #include <iostream>
+#include <string>
 
-
-MainWindow::MainWindow(const wxString& title, int width, int height)
-  : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(width, height))
+MainWindow::MainWindow(const wxString &title, int width, int height)
+    : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(width, height))
 {
   m_Panel = new wxPanel(this, wxID_ANY);
-  wxDirPickerCtrl* dirPickerCtrl = new wxDirPickerCtrl(m_Panel, 32700,
-        wxEmptyString, wxDirSelectorPromptStr,
-        wxDefaultPosition, wxSize(350, wxDefaultCoord));
-  wxBoxSizer *vbox = new wxBoxSizer(wxVERTICAL);
-  wxBoxSizer *hbox = new wxBoxSizer(wxHORIZONTAL);
+      dirPickerCtrl = new wxDirPickerCtrl(m_Panel, 32700,
+                                                       wxEmptyString, wxDirSelectorPromptStr,
+                                                       wxDefaultPosition, wxSize(350, wxDefaultCoord));
 
-  m_EditBox = new wxTextCtrl(m_Panel, wxID_ANY, wxT(""), 
-                             wxPoint(5,35), wxSize(160, 24));
 
-  m_Button = new wxButton(m_Panel, wxID_ANY, wxT("Quick Scan"), 
-                          wxPoint(5,35), wxSize(80, 25)); 
-  m_Button_2 = new wxButton(m_Panel, wxID_ANY, wxT("Full Scan"), 
-                          wxPoint(5,35), wxSize(80, 25)); 
-  hbox->Add(m_Button);
-  hbox->Add(m_Button_2);
-  vbox->Add(dirPickerCtrl);
-  vbox->Add(hbox);
-  vbox->Add(m_EditBox);
-  m_Button->Bind(wxEVT_BUTTON, &MainWindow::OnButtonClick, this);  
-  m_Panel->SetSizer(vbox);
-  Centre();
+  wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
+  wxBoxSizer *sideSizer = new wxBoxSizer(wxHORIZONTAL);
+  wxBoxSizer *sideSizer2 = new wxBoxSizer(wxHORIZONTAL);
+  m_item_list = new wxListCtrl(m_Panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
+  m_Button = new wxButton(m_Panel, wxID_ANY, wxT("Quick Scan"),
+                          wxPoint(5, 35), wxSize(80, 25));
+  m_Button_2 = new wxButton(m_Panel, wxID_ANY, wxT("Full Scan"),
+                            wxPoint(5, 35), wxSize(80, 25));
+  m_Button_3 = new wxButton(m_Panel, wxID_ANY, wxT("Unquarantine"),
+                            wxPoint(5, 35), wxSize(80, 25));
+  m_Button_4 = new wxButton(m_Panel, wxID_ANY, wxT("Delete"),
+                            wxPoint(5, 35), wxSize(80, 25));
+  // Add first column
+  wxListItem col0;
+  col0.SetId(0);
+  col0.SetText(_("File Path"));
+  col0.SetWidth(100);
+  m_item_list->InsertColumn(0, col0);
+
+  FileVault quarantine("quarantine.vault");
+  std::vector<std::string> items = quarantine.list();
+
+  for (int n = 0; n < (int) items.size(); n++)
+  {
+    wxListItem item;
+    item.SetId(n);
+    item.SetText(items[n]);
+
+    m_item_list->InsertItem(item);
+
+    m_item_list->SetItem(n, 0, items[n]);
+  }
+
+  topSizer->Add(dirPickerCtrl);
+    sideSizer2->Add(m_Button);
+  sideSizer2->Add(m_Button_2);
+
+  topSizer->Add(sideSizer2);
+
+  topSizer->Add(m_item_list);
+
+  sideSizer->Add(m_Button_3);
+  sideSizer->Add(m_Button_4);
+  topSizer->Add(sideSizer);
+  m_Panel->SetSizer(topSizer);
 }
 
-void MainWindow::OnButtonClick(wxCommandEvent & event)
-{
-  m_EditBox->SetValue(wxT("Hello World!"));
-}
 
-void MainWindow::OnPathChanged(wxFileDirPickerEvent& evt)
-{
-  m_EditBox->SetValue(wxT("Hello World!"));
-}
-
-// Add the event handler to the event table. As you can see we use the
-// window ID to link the event handler to the wxDirPickerCtrl we created.
-wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
-    EVT_DIRPICKER_CHANGED(32700, MainWindow::OnPathChanged)
-wxEND_EVENT_TABLE()
