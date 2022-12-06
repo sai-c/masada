@@ -69,6 +69,11 @@ void MainWindow::OnQuickButtonClicked(wxCommandEvent& evt)
 }
 void MainWindow::OnFullButtonClicked(wxCommandEvent& evt)
 {
+  wxString dir = dirPickerCtrl->GetPath();
+  m_EditBox->SetValue("Scanning " + dir);
+  m_EditBox->Refresh();
+  m_EditBox->Update();
+
   Definitions hashDefinitions("test.txt");
   Logger logger("log.txt");
   std::unique_ptr<IDetectionEngine> fullDetectionEngine = std::make_unique<PatternMatchingDetectionEngine>(hashDefinitions);
@@ -76,8 +81,6 @@ void MainWindow::OnFullButtonClicked(wxCommandEvent& evt)
 
   std::shared_ptr<VirusHandler> virusHandler = std::make_shared<VirusHandler>(std::move(quarantine));
   Scanner fullScanner(std::move(fullDetectionEngine), virusHandler);
-  wxString dir = dirPickerCtrl->GetPath();
-  m_EditBox->SetValue("Scanning " + dir);
   fullScanner.scan(dir.ToStdString());
   m_EditBox->SetValue("Scan doen");
   updateQuarantine();
