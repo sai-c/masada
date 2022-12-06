@@ -10,6 +10,7 @@ public:
     PatternMatchingDetectionEngine(Definitions hashDefinitions) : hashDefinitions_(hashDefinitions){};
     ~PatternMatchingDetectionEngine(){};
     bool checkFile(std::string filePath);
+    bool patternMatch(std::string file, std::string signature);
 
 private:
     Definitions hashDefinitions_;
