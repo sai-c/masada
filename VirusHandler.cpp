@@ -2,6 +2,8 @@
 #include <iostream>
 
 void VirusHandler::quarantine(std::string filePath) {
-    std::cout << "quarantined!";
+    std::cerr << filePath.c_str();
+    quarantine_->add(filePath);
+    quarantine_->write();
     return;
 }

@@ -29,6 +29,7 @@ class FileVault
         void extract(std::string files);
         void remove(std::string file_str);
         void add(std::string files);
+        void write();
         FileVault(std::string fileName);
         ~FileVault();
 };

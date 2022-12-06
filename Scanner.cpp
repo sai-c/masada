@@ -35,6 +35,7 @@ void Scanner::realTimeScan() {
     }
 }
 
+// return somethign gui just runs loops and says output in text box
 void Scanner::scan(std::string dir) {
     for (const auto& item : std::filesystem::recursive_directory_iterator(dir))
     {
@@ -42,5 +43,5 @@ void Scanner::scan(std::string dir) {
         {
             Scanner::handleFile(item.path());
         }
-    }
+    }    
 }

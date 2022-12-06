@@ -2,13 +2,18 @@
 #define VIRUSHANDLER_H
 
 #include <string>
+#include "FileVault.h"
+#include <memory>
 
 class VirusHandler
 {
     public: 
-        VirusHandler() {};
+        VirusHandler(std::unique_ptr<FileVault> quarantine) : quarantine_(std::move(quarantine)) {};
         void quarantine(std::string filePath);
         ~VirusHandler() = default;
+
+    private:
+        std::unique_ptr<FileVault> quarantine_;
 };
 
 

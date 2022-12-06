@@ -35,9 +35,7 @@ private:
   wxListBox* m_item_list;
   wxListCtrl* m_item_list2;
   wxDirPickerCtrl *dirPickerCtrl;
-  FileVault* quarantine;
     wxDECLARE_EVENT_TABLE();
-  Scanner* fullScanner;
 
 };
 
