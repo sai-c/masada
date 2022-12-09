@@ -8,12 +8,12 @@
 class VirusHandler
 {
     public: 
-        VirusHandler(std::unique_ptr<FileVault> quarantine) : quarantine_(std::move(quarantine)) {};
+        VirusHandler(std::shared_ptr<FileVault> quarantine) : quarantine_(std::move(quarantine)) {};
         void quarantine(std::string filePath);
         ~VirusHandler() = default;
 
     private:
-        std::unique_ptr<FileVault> quarantine_;
+        std::shared_ptr<FileVault> quarantine_;
 };
 
 

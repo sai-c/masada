@@ -79,9 +79,9 @@ int scan(std::string file) {
 }
 
 bool HashingDetectionEngine::checkFile(std::string filePath) {
-
-    hashDefinitions_.checkSignature("test");
-
+    std::string md5sum = exec(("md5sum " + filePath).c_str()).substr(0, 32);
+    return hashDefinitions_.checkHash(md5sum);
+    /*
     download();
     int res = scan(filePath);
     switch(res) {
@@ -95,5 +95,5 @@ bool HashingDetectionEngine::checkFile(std::string filePath) {
             std::cout << "File WAS found in the virus database. Please delete the file immediately." << std::endl;
             return true;
     }
-    return false;
+    return false;*/
 }

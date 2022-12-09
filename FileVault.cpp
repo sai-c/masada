@@ -19,8 +19,8 @@ FileVault::FileVault(std::string fileName)
         cur_file.read((char *)&num_files, 4);
         for (int i = 0; i < (long long)num_files; i++)
         {
-            std::string filename = std::string(100, '\0');
-            cur_file.read(&filename[0], 100);
+            std::string filename = std::string(20, '\0');
+            cur_file.read(&filename[0], 20);
             long unsigned int filesize;
             cur_file.read((char *)&filesize, 8);
             std::vector<char> data(filesize);
@@ -54,7 +54,12 @@ void FileVault::extract(std::string file_str)
         {
             exists = true;
             std::ofstream ofs(file.filename, std::ofstream::binary | std::ofstream::trunc);
-            ofs.write(file.data.data(), file.data.size());
+            std::vector<char> data = file.data;
+            for (long unsigned int i = 0; i < data.size(); i++) {
+                data[i] ^= 0xFF; 
+            }
+
+            ofs.write(data.data(), file.data.size());
             ofs.close();
         }
     }
@@ -111,8 +116,13 @@ void FileVault::add(std::string file_name)
         perror("error opening file");
         return;
     }
+
+    for (long unsigned int i = 0; i < data_to_write.size(); i++) {
+        data_to_write[i] ^= 0xFF; 
+    }
+
     std::string padded_file_name = file_name;
-    padded_file_name.insert(file_name.size(), 100 - file_name.size(), 0);
+    padded_file_name.insert(file_name.size(), 20 - file_name.size(), 0);
 
     File cur_file = {
         padded_file_name,
@@ -139,7 +149,7 @@ void FileVault::write() {
         ofs.write((char *)&num_files, 4);
         for (File file : this->files)
         {
-            ofs.write(file.filename.c_str(), 100);
+            ofs.write(file.filename.c_str(), 20);
             ofs.write((char *)&file.filesize, 8);
             ofs.write(file.data.data(), file.data.size());
         }

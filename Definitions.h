@@ -8,12 +8,14 @@ class Definitions
 {
     private:
         std::vector<std::string> hashes;
+        std::vector<std::string> signatures;
         void loadSignatures(std::string fileName);
+        void loadHashes(std::string fileName);
 
     public: 
-        Definitions(std::string fileName);
+        Definitions(std::string hashesPath, std::string sigsPath);
         std::vector<std::string> getSignatures();
-        bool checkSignature(std::string signature);
+        bool checkHash(std::string signature);
         ~Definitions() = default;
 };
 
