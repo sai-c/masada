@@ -1,13 +1,6 @@
 #include "mainwindow.h"
 #include <iostream>
 #include <string>
-#include "Definitions.h"
-#include "IDetectionEngine.h"
-#include "HashingDetectionEngine.h"
-#include "PatternMatchingDetectionEngine.h"
-#include "Scanner.h"
-#include "Logger.h"
-#include "FileVault.h"
 
 #include <thread>
 #include <memory>
@@ -60,6 +53,11 @@ MainWindow::MainWindow(const wxString &title, int width, int height)
   m_Panel->SetSizer(topSizer);
 }
 
+std::unique_ptr<Controller> MainWindow::makeController() {
+    auto c = std::make_unique<Controller>("hashes.txt", "sigs.txt");
+    return c;
+}
+
 void MainWindow::OnQuickButtonClicked(wxCommandEvent& evt)
 {
   wxString dir = dirPickerCtrl->GetPath();
@@ -73,15 +71,7 @@ void MainWindow::OnFullButtonClicked(wxCommandEvent& evt)
   m_EditBox->SetValue("Scanning " + dir);
   m_EditBox->Refresh();
   m_EditBox->Update();
-
-  Definitions hashDefinitions("test.txt");
-  Logger logger("log.txt");
-  std::unique_ptr<IDetectionEngine> fullDetectionEngine = std::make_unique<PatternMatchingDetectionEngine>(hashDefinitions);
-  std::unique_ptr<FileVault> quarantine = std::make_unique<FileVault>("quarantine.vault");
-
-  std::shared_ptr<VirusHandler> virusHandler = std::make_shared<VirusHandler>(std::move(quarantine));
-  Scanner fullScanner(std::move(fullDetectionEngine), virusHandler);
-  fullScanner.scan(dir.ToStdString());
+  makeController()->launchFullScan(dir.ToStdString());
   m_EditBox->SetValue("Scan doen");
   updateQuarantine();
   evt.Skip();
@@ -90,13 +80,11 @@ void MainWindow::OnUnqButtonClicked(wxCommandEvent& evt)
 {
   int id = m_item_list->GetSelection();
   wxString test = m_item_list->GetString(id);
-  FileVault quarantine("quarantine.vault");
-
+  auto c = makeController();
   if (id >= 0) {
-    quarantine.extract(test.ToStdString());
-    quarantine.remove(test.ToStdString());
+    c->unQuarantine(test.ToStdString());
   }
-  quarantine.write();
+  c->writeQuarantine();
   m_EditBox->SetValue("Unquarantined " + test);
   updateQuarantine();
   evt.Skip();
@@ -105,20 +93,19 @@ void MainWindow::OnDelButtonClicked(wxCommandEvent& evt)
 {
   int id = m_item_list->GetSelection();
   wxString test = m_item_list->GetString(id);
-  FileVault quarantine("quarantine.vault");
+  auto c = makeController();
   if (id >= 0) {
-    quarantine.remove(test.ToStdString());
+    c->deleteQuarantine(test.ToStdString());
   }
+  c->writeQuarantine();
   m_EditBox->SetValue("Deleted " + test);
-  quarantine.write();
   updateQuarantine();
   evt.Skip();
 }
 void MainWindow::updateQuarantine() {
   m_item_list->Clear();
-  FileVault quarantine("quarantine.vault");
 
-  std::vector<std::string> items = quarantine.list();
+  auto items = makeController()->listQuarantine();
 
   for (int n = 0; n < (int) items.size(); n++)
   {

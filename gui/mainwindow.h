@@ -3,13 +3,14 @@
 
 #include <wx/wx.h>
 #include <wx/sizer.h>
+#include <memory>
+
 #include <FileVault.h>
-#include "Scanner.h"
+#include "Controller.h"
 
 
 #include <wx/filepicker.h>
 #include <wx/listctrl.h>
-#include <memory>
 
 
 
@@ -22,7 +23,9 @@ public:
   void OnUnqButtonClicked(wxCommandEvent& evt);
   void OnDelButtonClicked(wxCommandEvent& evt);
   void updateQuarantine();
+
 private:
+  std::unique_ptr<Controller> makeController();
   wxPanel * m_Panel;  
   wxPanel * m_Panel_2;  
   wxPanel * m_Panel_3;  
@@ -35,7 +38,7 @@ private:
   wxListBox* m_item_list;
   wxListCtrl* m_item_list2;
   wxDirPickerCtrl *dirPickerCtrl;
-    wxDECLARE_EVENT_TABLE();
+  wxDECLARE_EVENT_TABLE();
 
 };
 
