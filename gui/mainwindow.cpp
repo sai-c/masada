@@ -7,6 +7,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <stdio.h>
+#include <numeric>
 #include <string>
 
 
@@ -53,16 +54,23 @@ MainWindow::MainWindow(const wxString &title, int width, int height)
   m_Panel->SetSizer(topSizer);
 }
 
-std::unique_ptr<Controller> MainWindow::makeController() {
-    auto c = std::make_unique<Controller>("hashes.txt", "sigs.txt");
+std::shared_ptr<Controller> MainWindow::makeController() {
+    auto c = std::make_shared<Controller>("hashes.txt", "sigs.txt");
     return c;
 }
 
 void MainWindow::OnQuickButtonClicked(wxCommandEvent& evt)
 {
   wxString dir = dirPickerCtrl->GetPath();
-  
-  m_EditBox->SetValue(dir);
+  m_EditBox->SetValue("Scanning " + dir);
+  m_EditBox->Refresh();
+  m_EditBox->Update();
+  auto c = makeController();
+  c->launchQuickScan(dir.ToStdString());
+  auto output = c->getOutput();
+  auto parsed = std::accumulate(output.begin(), output.end(), std::string(" "));
+  m_EditBox->SetValue(parsed);
+  updateQuarantine();
   evt.Skip();
 }
 void MainWindow::OnFullButtonClicked(wxCommandEvent& evt)
@@ -71,8 +79,12 @@ void MainWindow::OnFullButtonClicked(wxCommandEvent& evt)
   m_EditBox->SetValue("Scanning " + dir);
   m_EditBox->Refresh();
   m_EditBox->Update();
-  makeController()->launchFullScan(dir.ToStdString());
-  m_EditBox->SetValue("Scan doen");
+  auto c = makeController();
+  c->launchFullScan(dir.ToStdString());
+  auto output = c->getOutput();
+  auto parsed = std::accumulate(output.begin(), output.end(), std::string(" "));
+  
+  m_EditBox->SetValue(parsed);
   updateQuarantine();
   evt.Skip();
 }
@@ -111,6 +123,9 @@ void MainWindow::updateQuarantine() {
   {
     m_item_list->Append(items[n]);
   }
+  m_item_list->Refresh();
+  m_item_list->Update();
+
 }
 
 
