@@ -55,8 +55,9 @@ void FileVault::extract(std::string file_str)
             exists = true;
             std::ofstream ofs(file.filename, std::ofstream::binary | std::ofstream::trunc);
             std::vector<char> data = file.data;
-            for (long unsigned int i = 0; i < data.size(); i++) {
-                data[i] ^= 0xFF; 
+            for (long unsigned int i = 0; i < data.size(); i++)
+            {
+                data[i] ^= 0xFF;
             }
 
             ofs.write(data.data(), file.data.size());
@@ -116,8 +117,9 @@ void FileVault::add(std::string file_name)
         return;
     }
 
-    for (long unsigned int i = 0; i < data_to_write.size(); i++) {
-        data_to_write[i] ^= 0xFF; 
+    for (long unsigned int i = 0; i < data_to_write.size(); i++)
+    {
+        data_to_write[i] ^= 0xFF;
     }
 
     std::string padded_file_name = file_name;
@@ -132,7 +134,8 @@ void FileVault::add(std::string file_name)
     this->change = true;
 }
 
-void FileVault::write() {
+void FileVault::write()
+{
     if (this->change)
     {
         if (this->files.size() == 0)

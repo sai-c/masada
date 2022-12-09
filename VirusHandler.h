@@ -7,14 +7,13 @@
 
 class VirusHandler
 {
-    public: 
-        VirusHandler(std::shared_ptr<FileVault> quarantine) : quarantine_(std::move(quarantine)) {};
-        void quarantine(std::string filePath);
-        ~VirusHandler() = default;
+public:
+    VirusHandler(std::shared_ptr<FileVault> quarantine) : quarantine_(std::move(quarantine)){};
+    void quarantine(std::string filePath);
+    ~VirusHandler() = default;
 
-    private:
-        std::shared_ptr<FileVault> quarantine_;
+private:
+    std::shared_ptr<FileVault> quarantine_;
 };
-
 
 #endif

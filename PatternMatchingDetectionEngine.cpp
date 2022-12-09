@@ -87,7 +87,7 @@ bool PatternMatchingDetectionEngine::patternMatch(std::string file, std::string 
 
         if (i < n - m)
         {
-            //std::cout << "Calculating next hash value" << std::endl;
+            // std::cout << "Calculating next hash value" << std::endl;
             t = (d * (t - file[i] * h) + file[i + m]) % q;
 
             if (t < 0) // negative numbers

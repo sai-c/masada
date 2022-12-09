@@ -10,15 +10,13 @@
 #include <numeric>
 #include <string>
 
-
 MainWindow::MainWindow(const wxString &title, int width, int height)
     : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(width, height))
 {
   m_Panel = new wxPanel(this, wxID_ANY);
-      dirPickerCtrl = new wxDirPickerCtrl(m_Panel, 32700,
-                                                       wxEmptyString, wxDirSelectorPromptStr,
-                                                       wxDefaultPosition, wxSize(350, wxDefaultCoord));
-
+  dirPickerCtrl = new wxDirPickerCtrl(m_Panel, 32700,
+                                      wxEmptyString, wxDirSelectorPromptStr,
+                                      wxDefaultPosition, wxSize(350, wxDefaultCoord));
 
   wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
   wxBoxSizer *sideSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -39,26 +37,27 @@ MainWindow::MainWindow(const wxString &title, int width, int height)
   updateQuarantine();
 
   topSizer->Add(dirPickerCtrl, 0, wxALIGN_CENTER | wxALL, 3);
-    sideSizer2->Add(m_Button);
+  sideSizer2->Add(m_Button);
   sideSizer2->Add(m_Button_2);
 
   topSizer->Add(sideSizer2, 0, wxALIGN_CENTER | wxBOTTOM, 20);
 
-  topSizer->Add(m_item_list, 0, wxALIGN_CENTER  | wxBOTTOM, 1);
+  topSizer->Add(m_item_list, 0, wxALIGN_CENTER | wxBOTTOM, 1);
 
   sideSizer->Add(m_Button_3);
   sideSizer->Add(m_Button_4);
-  topSizer->Add(sideSizer, 0, wxALIGN_CENTER   | wxBOTTOM, 20);
+  topSizer->Add(sideSizer, 0, wxALIGN_CENTER | wxBOTTOM, 20);
   topSizer->Add(m_EditBox, 0, wxALIGN_CENTER);
   m_Panel->SetSizer(topSizer);
 }
 
-std::shared_ptr<Controller> MainWindow::makeController() {
-    auto c = std::make_shared<Controller>("hashes.txt", "sigs.txt");
-    return c;
+std::shared_ptr<Controller> MainWindow::makeController()
+{
+  auto c = std::make_shared<Controller>("hashes.txt", "sigs.txt");
+  return c;
 }
 
-void MainWindow::OnQuickButtonClicked(wxCommandEvent& evt)
+void MainWindow::OnQuickButtonClicked(wxCommandEvent &evt)
 {
   wxString dir = dirPickerCtrl->GetPath();
   m_EditBox->SetValue("Scanning " + dir);
@@ -74,7 +73,7 @@ void MainWindow::OnQuickButtonClicked(wxCommandEvent& evt)
   updateQuarantine();
   evt.Skip();
 }
-void MainWindow::OnFullButtonClicked(wxCommandEvent& evt)
+void MainWindow::OnFullButtonClicked(wxCommandEvent &evt)
 {
   wxString dir = dirPickerCtrl->GetPath();
   m_EditBox->SetValue("Scanning " + dir);
@@ -91,12 +90,13 @@ void MainWindow::OnFullButtonClicked(wxCommandEvent& evt)
   updateQuarantine();
   evt.Skip();
 }
-void MainWindow::OnUnqButtonClicked(wxCommandEvent& evt)
+void MainWindow::OnUnqButtonClicked(wxCommandEvent &evt)
 {
   int id = m_item_list->GetSelection();
   wxString test = m_item_list->GetString(id);
   auto c = makeController();
-  if (id >= 0) {
+  if (id >= 0)
+  {
     c->unQuarantine(test.ToStdString());
   }
   c->writeQuarantine();
@@ -104,12 +104,13 @@ void MainWindow::OnUnqButtonClicked(wxCommandEvent& evt)
   updateQuarantine();
   evt.Skip();
 }
-void MainWindow::OnDelButtonClicked(wxCommandEvent& evt)
+void MainWindow::OnDelButtonClicked(wxCommandEvent &evt)
 {
   int id = m_item_list->GetSelection();
   wxString test = m_item_list->GetString(id);
   auto c = makeController();
-  if (id >= 0) {
+  if (id >= 0)
+  {
     c->deleteQuarantine(test.ToStdString());
   }
   c->writeQuarantine();
@@ -117,24 +118,23 @@ void MainWindow::OnDelButtonClicked(wxCommandEvent& evt)
   updateQuarantine();
   evt.Skip();
 }
-void MainWindow::updateQuarantine() {
+void MainWindow::updateQuarantine()
+{
   m_item_list->Clear();
 
   auto items = makeController()->listQuarantine();
 
-  for (int n = 0; n < (int) items.size(); n++)
+  for (int n = 0; n < (int)items.size(); n++)
   {
     m_item_list->Append(items[n]);
   }
   m_item_list->Refresh();
   m_item_list->Update();
-
 }
-
 
 wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
     EVT_BUTTON(101, MainWindow::OnQuickButtonClicked)
-    EVT_BUTTON(102, MainWindow::OnFullButtonClicked)
-    EVT_BUTTON(103, MainWindow::OnUnqButtonClicked)
-    EVT_BUTTON(104, MainWindow::OnDelButtonClicked)
-wxEND_EVENT_TABLE()
+        EVT_BUTTON(102, MainWindow::OnFullButtonClicked)
+            EVT_BUTTON(103, MainWindow::OnUnqButtonClicked)
+                EVT_BUTTON(104, MainWindow::OnDelButtonClicked)
+                    wxEND_EVENT_TABLE()

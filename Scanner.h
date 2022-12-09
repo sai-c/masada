@@ -19,7 +19,7 @@ private:
     bool handleFile(std::string filePath);
 
 public:
-    Scanner(std::unique_ptr<IDetectionEngine> detectionEngine, std::shared_ptr<VirusHandler> virusHandler, std::shared_ptr<Logger> logger) 
+    Scanner(std::unique_ptr<IDetectionEngine> detectionEngine, std::shared_ptr<VirusHandler> virusHandler, std::shared_ptr<Logger> logger)
         : detectionEngine_(std::move(detectionEngine)), virusHandler_(std::move(virusHandler)), logger_(std::move(logger)){};
     void realTimeScan();
     void scan(std::string dir);

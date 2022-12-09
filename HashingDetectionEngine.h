@@ -4,7 +4,7 @@
 #include "IDetectionEngine.h"
 #include "Definitions.h"
 
-class HashingDetectionEngine: public IDetectionEngine 
+class HashingDetectionEngine : public IDetectionEngine
 {
 public:
     HashingDetectionEngine(Definitions hashDefinitions) : hashDefinitions_(hashDefinitions){};
