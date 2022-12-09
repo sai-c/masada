@@ -4,16 +4,18 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <memory>
 #include <fstream>
 
 class Logger
 {
     private:
-        std::ofstream logFile;
+        std::unique_ptr<std::vector<std::string>> recentLog;
 
     public: 
-        Logger(std::string fileName);
-        void write(std::string message);
+        Logger();
+        void write(std::string fileName, std::string message);
+        std::vector<std::string> get();
         ~Logger();
 };
 

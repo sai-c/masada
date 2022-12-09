@@ -3,6 +3,7 @@
 #include <vector>
 #include <filesystem>
 #include <string>
+#include <chrono>
 #include <iostream>
 
 std::vector<std::string> Scanner::getOpenFiles() {
@@ -21,11 +22,12 @@ std::vector<std::string> Scanner::getOpenFiles() {
     return openFiles;
 }
 
-void Scanner::handleFile(std::string filePath) {
+bool Scanner::handleFile(std::string filePath) {
     bool result = detectionEngine_->checkFile(filePath);
     if (result) {
         virusHandler_->quarantine(filePath);
     }
+    return result;
 }
 
 void Scanner::realTimeScan() {
@@ -35,13 +37,20 @@ void Scanner::realTimeScan() {
     }
 }
 
-// return somethign gui just runs loops and says output in text box
 void Scanner::scan(std::string dir) {
+    int scanned = 0;
+    int quarantined = 0;
+    auto t1 = std::chrono::high_resolution_clock::now();
     for (const auto& item : std::filesystem::recursive_directory_iterator(dir))
     {
         if (item.is_regular_file() && !item.is_symlink())
         {
-            Scanner::handleFile(item.path());
+            bool result = Scanner::handleFile(item.path());
+            quarantined += result;
+            scanned += 1;
         }
     }    
+    auto t2 = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<float> t_ans = t2 - t1;
+    logger_->write("log.txt", "Scanned: " + std::to_string(scanned) + "\nQuarantined: " + std::to_string(quarantined) + "\n Time: " + std::to_string(t_ans.count()) + "s");
 }

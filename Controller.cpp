@@ -1,13 +1,5 @@
 // This file takes in user input (can be later changed to UI), and calls Scanner
-#include "Definitions.h"
-#include "IDetectionEngine.h"
-#include "HashingDetectionEngine.h"
-#include "PatternMatchingDetectionEngine.h"
-#include "Scanner.h"
-#include "Logger.h"
 #include "Controller.h"
-#include "FileVault.h"
-
 #include <thread>
 #include <memory>
 #include <iostream>
@@ -20,25 +12,25 @@
 Controller::Controller(std::string hashesPath, std::string sigsPath) {
     definitions = std::make_unique<Definitions>(hashesPath, sigsPath);
     quarantine = std::make_shared<FileVault>("quarantine.vault");
-    logger = std::make_unique<Logger>("log.txt");
+    logger = std::make_shared<Logger>();
 }
 
 void Controller::launchQuickScan(std::string path) {
     std::unique_ptr<IDetectionEngine> quickDetectionEngine = std::make_unique<HashingDetectionEngine>(*definitions);
     std::shared_ptr<VirusHandler> virusHandler = std::make_shared<VirusHandler>(quarantine);
-    Scanner quickScanner(std::move(quickDetectionEngine), virusHandler);
+    Scanner quickScanner(std::move(quickDetectionEngine), virusHandler, logger);
     quickScanner.scan(path);
 }
 void Controller::launchFullScan(std::string path) {
     std::unique_ptr<IDetectionEngine> fullDetectionEngine = std::make_unique<PatternMatchingDetectionEngine>(*definitions);
     std::shared_ptr<VirusHandler> virusHandler = std::make_shared<VirusHandler>(quarantine);
-    Scanner fullScanner(std::move(fullDetectionEngine), virusHandler);
+    Scanner fullScanner(std::move(fullDetectionEngine), virusHandler, logger);
     fullScanner.scan(path);
 }
 void Controller::launchRealTimeScan(std::string path) {
     std::unique_ptr<IDetectionEngine> quickDetectionEngine = std::make_unique<HashingDetectionEngine>(*definitions);
     std::shared_ptr<VirusHandler> virusHandler = std::make_shared<VirusHandler>(quarantine);
-    Scanner quickScanner(std::move(quickDetectionEngine), virusHandler);
+    Scanner quickScanner(std::move(quickDetectionEngine), virusHandler, logger);
     quickScanner.scan(path);
     std::thread realTimeScanning {&Scanner::realTimeScan, &quickScanner};
     realTimeScanning.join();
@@ -54,9 +46,10 @@ void Controller::unQuarantine(std::string path) {
 void Controller::deleteQuarantine(std::string path) {
     quarantine->remove(path);
 }
+void Controller::writeQuarantine() {
+    quarantine->write();
+}
 
-int main()
-{
-    Controller c("hashes.txt", "sigs.txt");
-    c.launchFullScan("test");
+std::vector<std::string> Controller::getOutput() {
+    return logger->get();
 }
