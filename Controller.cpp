@@ -10,8 +10,6 @@
 #include <thread>
 
 
-// TODO: MAKE EVERYTHING CONST/CONSTREF
-
 Controller::Controller(std::string hashesPath, std::string sigsPath)
 {
     definitions = std::make_unique<Definitions>(hashesPath, sigsPath);

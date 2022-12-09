@@ -9,7 +9,7 @@ void Logger::write(std::string fileName, std::string message)
 {
     this->recentLog->push_back(message);
     std::ofstream logFile;
-    logFile.open(fileName);
+    logFile.open(fileName, std::ios_base::app);
     logFile << message;
     logFile.close();
 }

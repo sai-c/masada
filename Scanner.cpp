@@ -10,7 +10,7 @@ std::vector<std::string> Scanner::getOpenFiles()
 {
     char buffer[128];
     std::vector<std::string> openFiles;
-    std::string command("lsof / | egrep 'REG'  | tr -s ' ' | cut -d' ' -f 9");
+    std::string command("lsof | egrep 'REG'  | tr -s ' ' | cut -d' ' -f 9 | grep test");
 
     FILE *pipe = popen(command.c_str(), "r");
 
@@ -40,6 +40,7 @@ void Scanner::realTimeScan()
     for (std::string &filePath : openFiles)
     {
         Scanner::handleFile(filePath);
+        logger_->write("realtime.txt", "Scanned " + filePath);
     }
 }
 
