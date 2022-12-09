@@ -6,7 +6,6 @@
 
 bool PatternMatchingDetectionEngine::checkFile(std::string filePath)
 {
-    std::cerr << filePath;
     auto signatures = hashDefinitions_.getSignatures();
     std::ifstream openfile(filePath, std::ios::binary | std::ios::ate);
     std::vector<char> data;
