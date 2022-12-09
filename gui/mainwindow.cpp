@@ -49,6 +49,7 @@ MainWindow::MainWindow(const wxString &title, int width, int height)
   topSizer->Add(sideSizer, 0, wxALIGN_CENTER | wxBOTTOM, 20);
   topSizer->Add(m_EditBox, 0, wxALIGN_CENTER);
   m_Panel->SetSizer(topSizer);
+
 }
 
 std::shared_ptr<Controller> MainWindow::makeController()

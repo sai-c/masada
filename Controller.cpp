@@ -6,6 +6,9 @@
 #include <stdexcept>
 #include <stdio.h>
 #include <string>
+#include <chrono>
+#include <thread>
+
 
 // TODO: MAKE EVERYTHING CONST/CONSTREF
 
@@ -30,14 +33,15 @@ void Controller::launchFullScan(std::string path)
     Scanner fullScanner(std::move(fullDetectionEngine), virusHandler, logger);
     fullScanner.scan(path);
 }
-void Controller::launchRealTimeScan(std::string path)
+void Controller::launchRealTimeScan()
 {
-    std::unique_ptr<IDetectionEngine> quickDetectionEngine = std::make_unique<HashingDetectionEngine>(*definitions);
-    std::shared_ptr<VirusHandler> virusHandler = std::make_shared<VirusHandler>(quarantine);
-    Scanner quickScanner(std::move(quickDetectionEngine), virusHandler, logger);
-    quickScanner.scan(path);
-    std::thread realTimeScanning{&Scanner::realTimeScan, &quickScanner};
-    realTimeScanning.join();
+    while (1) {
+        std::unique_ptr<IDetectionEngine> quickDetectionEngine = std::make_unique<HashingDetectionEngine>(*definitions);
+        std::shared_ptr<VirusHandler> virusHandler = std::make_shared<VirusHandler>(quarantine);
+        Scanner quickScanner(std::move(quickDetectionEngine), virusHandler, logger);
+        quickScanner.realTimeScan();
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    }
 }
 std::vector<std::string> Controller::listQuarantine()
 {
@@ -60,4 +64,12 @@ void Controller::writeQuarantine()
 std::vector<std::string> Controller::getOutput()
 {
     return logger->get();
+}
+
+Controller::~Controller() {
+    for (std::thread& thread : threads)
+    {
+        if (thread.joinable())
+            thread.join();
+    }
 }

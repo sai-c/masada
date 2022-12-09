@@ -22,6 +22,7 @@ public:
   void updateQuarantine();
 
 private:
+  std::unique_ptr<Controller> controller;
   std::shared_ptr<Controller> makeController();
   wxPanel *m_Panel;
   wxPanel *m_Panel_2;

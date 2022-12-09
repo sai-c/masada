@@ -106,19 +106,4 @@ bool HashingDetectionEngine::checkFile(std::string filePath)
 {
     std::string md5sum = exec(("md5sum " + filePath).c_str()).substr(0, 32);
     return hashDefinitions_.checkHash(md5sum);
-    /*
-    download();
-    int res = scan(filePath);
-    switch(res) {
-        case 0:
-            std::cout << "File does not exist. Please specify a valid file and try again." << std::endl;
-            return false;
-        case 1:
-            std::cout << "File was NOT found in the virus database. Opening this file may be safe." << std::endl;
-            return false;
-        case 2:
-            std::cout << "File WAS found in the virus database. Please delete the file immediately." << std::endl;
-            return true;
-    }
-    return false;*/
 }

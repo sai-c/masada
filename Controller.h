@@ -2,6 +2,7 @@
 #define CONTROLLER_H
 
 #include <string>
+#include <thread>
 #include <vector>
 #include "Definitions.h"
 #include "IDetectionEngine.h"
@@ -18,18 +19,19 @@ private:
     std::shared_ptr<FileVault> quarantine;
     std::unique_ptr<Definitions> definitions;
     std::shared_ptr<Logger> logger;
+    std::vector<std::thread> threads;
 
 public:
     Controller(std::string hashesPath, std::string sigsPath);
     void launchQuickScan(std::string path);
     void launchFullScan(std::string path);
-    void launchRealTimeScan(std::string path);
+    void launchRealTimeScan();
     std::vector<std::string> listQuarantine();
     void unQuarantine(std::string path);
     void deleteQuarantine(std::string path);
     void writeQuarantine();
     std::vector<std::string> getOutput();
-    ~Controller() = default;
+    ~Controller();
 };
 
 #endif
