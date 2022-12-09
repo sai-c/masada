@@ -14,7 +14,7 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit()
 {
-  MainWindow *mainWindow = new MainWindow(wxT("MyApp"), 640, 480);
+  MainWindow *mainWindow = new MainWindow(wxT("Masada - Antivirus"), 640, 480);
   mainWindow->Show(true);
 
   return true;

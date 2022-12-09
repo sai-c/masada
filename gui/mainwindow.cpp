@@ -29,27 +29,26 @@ MainWindow::MainWindow(const wxString &title, int width, int height)
   m_Button_2 = new wxButton(m_Panel, 102, wxT("Full Scan"),
                             wxPoint(5, 35), wxSize(80, 25));
   m_Button_3 = new wxButton(m_Panel, 103, wxT("Unquarantine"),
-                            wxPoint(5, 35), wxSize(80, 25));
+                            wxPoint(5, 35), wxSize(100, 25));
   m_Button_4 = new wxButton(m_Panel, 104, wxT("Delete"),
                             wxPoint(5, 35), wxSize(80, 25));
-
-    m_EditBox = new wxTextCtrl(m_Panel, wxID_ANY, wxT(""),
-                             wxPoint(5, 35), wxSize(160, 24));
+  m_EditBox = new wxTextCtrl(m_Panel, wxID_ANY, wxT(""),
+                             wxPoint(5, 35), wxSize(400, 200), wxTE_MULTILINE);
   // Add first column
 
   updateQuarantine();
 
-  topSizer->Add(dirPickerCtrl, 0, wxALIGN_CENTER);
+  topSizer->Add(dirPickerCtrl, 0, wxALIGN_CENTER | wxALL, 3);
     sideSizer2->Add(m_Button);
   sideSizer2->Add(m_Button_2);
 
-  topSizer->Add(sideSizer2, 0, wxALIGN_CENTER);
+  topSizer->Add(sideSizer2, 0, wxALIGN_CENTER | wxBOTTOM, 20);
 
-  topSizer->Add(m_item_list, 0, wxALIGN_CENTER);
+  topSizer->Add(m_item_list, 0, wxALIGN_CENTER  | wxBOTTOM, 1);
 
   sideSizer->Add(m_Button_3);
   sideSizer->Add(m_Button_4);
-  topSizer->Add(sideSizer, 0, wxALIGN_CENTER);
+  topSizer->Add(sideSizer, 0, wxALIGN_CENTER   | wxBOTTOM, 20);
   topSizer->Add(m_EditBox, 0, wxALIGN_CENTER);
   m_Panel->SetSizer(topSizer);
 }
@@ -70,6 +69,8 @@ void MainWindow::OnQuickButtonClicked(wxCommandEvent& evt)
   auto output = c->getOutput();
   auto parsed = std::accumulate(output.begin(), output.end(), std::string(" "));
   m_EditBox->SetValue(parsed);
+  m_EditBox->Refresh();
+  m_EditBox->Update();
   updateQuarantine();
   evt.Skip();
 }
@@ -83,8 +84,10 @@ void MainWindow::OnFullButtonClicked(wxCommandEvent& evt)
   c->launchFullScan(dir.ToStdString());
   auto output = c->getOutput();
   auto parsed = std::accumulate(output.begin(), output.end(), std::string(" "));
-  
+  std::cerr << "TEST:::" + parsed;
   m_EditBox->SetValue(parsed);
+  m_EditBox->Refresh();
+  m_EditBox->Update();
   updateQuarantine();
   evt.Skip();
 }

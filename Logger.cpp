@@ -5,11 +5,11 @@ Logger::Logger() {
 }
 
 void Logger::write(std::string fileName, std::string message) {
+    this->recentLog->push_back(message);
     std::ofstream logFile;
     logFile.open(fileName);
     logFile << message;
     logFile.close();
-    this->recentLog->push_back(message);
 }
 
 std::vector<std::string> Logger::get() {
